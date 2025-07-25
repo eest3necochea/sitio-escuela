@@ -10,7 +10,7 @@ $f3->set('DEBUG', 3);
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 // Set the autoload paths for the application
-$f3->set('AUTOLOAD', './controllers/;./views/');
+$f3->set('AUTOLOAD', './controllers/;./views/;./config/');
 
 
 

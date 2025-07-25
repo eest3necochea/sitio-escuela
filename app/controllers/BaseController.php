@@ -8,6 +8,22 @@ declare(strict_types=1);
 abstract class BaseController
 {
 
+    public $db = null;
+
+
+    public function __construct()
+    {
+        $this->db = new \DB\SQL(
+            'mysql:host=mysql5.7_container;port=3306;dbname=estudiantes-db',
+            'root',
+            ''
+        );
+    }
+
+    public function getMySQLConnect(): \DB\SQL
+    {
+        return $this->db;
+    }
     /**
      * This method is called before the route is executed.
      * It can be used to perform actions such as authentication, logging, etc.

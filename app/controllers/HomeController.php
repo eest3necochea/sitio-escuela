@@ -9,13 +9,18 @@ final class HomeController extends BaseController
     public function homeAction(\Base $f3): void
     {
 
-        $f3->set('name', 'world');
+        var_dump($this->getMySQLConnect());
+
+        $f3->set('name', 'HELLO HORLD');
         $vista = new View();
-        echo $vista->render('./views/home.html');
+        echo $vista->render('./views/home.php');
     }
 
     public function schoolAction(\Base $f3): void
     {
+
+
+        var_dump($this->getMySQLConnect());
 
         $f3->set('name', 'EEST3NECOCHEA');
         $vista = new View();

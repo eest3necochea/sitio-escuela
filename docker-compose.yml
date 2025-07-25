@@ -16,7 +16,7 @@ services:
   php:
     container_name: php8.2_container
     build:
-      context: .
+      context: ./app
       dockerfile: Dockerfile
     volumes:
       - ./app:/var/www/html
@@ -36,25 +36,25 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes" # Permite acceso sin contraseña
       MYSQL_DATABASE: estudiantes-db
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - ./mysql-data:/var/lib/mysql
     networks:
       - db-network
 
-  # phpmyadmin:
-  #   image: phpmyadmin/phpmyadmin
-  #   container_name: phpmyadmin_container
-  #   restart: always
-  #   environment:
-  #     PMA_HOST: mysql
-  #     ALLOW_NO_PASSWORD: "true"
-  #   ports:
-  #     - "3308:80"
-  #   depends_on:
-  #     - mysql
-  #   networks:
-  #     - db-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      ALLOW_NO_PASSWORD: "true"
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - db-network
 
 volumes:
   mysql-data:
