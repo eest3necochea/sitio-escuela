@@ -4,33 +4,22 @@
 declare(strict_types=1);
 
 
-
-abstract class BaseController
+abstract class BaseAuthController
 {
 
-    public $dbMySQL = null;
-
-
-    public function __construct()
-    {
-        $this->dbMySQL = new \DB\SQL(
-            'mysql:host=' . Config::DB_MYSQL_HOST . ';port=' . Config::DB_MYSQL_PORT . ';dbname=' . Config::DB_MYSQL_NAME . '',
-            Config::DB_MYSQL_USERNAME,
-            Config::DB_MYSQL_PASSWORD
-        );
-    }
-
-    public function getMySQLConnect(): \DB\SQL
-    {
-        return $this->dbMySQL;
-    }
     /**
      * This method is called before the route is executed.
      * It can be used to perform actions such as authentication, logging, etc.
      * @param \Base $f3 The Fat-Free Framework instance
      * @return bool
      */
-    public function beforeRoute(\Base $f3, array $routes): void {}
+    public function beforeRoute(\Base $f3): void
+    {
+        // SESSION
+        if (!$f3->get('SESSION.user')) {
+            $f3->reroute(Config::URL_BASE); // Redirect to login if not authenticated
+        }
+    }
 
 
     /**
