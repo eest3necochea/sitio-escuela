@@ -9,5 +9,5 @@ final class Config
     const DB_MYSQL_PASSWORD = '';
 
 
-    const URL_BASE = 'http://localhost'; // Base URL of the application
+    const URL_BASE = 'http://localhost:8000'; // Base URL of the application
 }

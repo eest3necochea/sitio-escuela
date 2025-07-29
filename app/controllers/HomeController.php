@@ -18,8 +18,8 @@ final class HomeController extends BaseController
 
         // var_dump($user);
         $f3->set('name', 'HELLO HORLD');
-        $vista = new View();
-        echo $vista->render('./views/home.php');
+        // $vista = new View();
+        // echo $vista->render('./views/home.php');
     }
 
     public function schoolAction(\Base $f3): void

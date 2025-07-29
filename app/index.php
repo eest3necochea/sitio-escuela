@@ -6,71 +6,58 @@ $f3 = \Base::instance();
 // Set debug level (0-3)
 $f3->set('DEBUG', 3);
 
-// Set the base path for the application
-
-
 // Set the default timezone
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 // Set the autoload paths for the application
 $f3->set('AUTOLOAD', './controllers/;./views/;./config/');
 
-
 // ROUTES
-
-$routes = [
+// Define the routing configuration
+// This configuration defines public and private routes
+$routing = [
     "public" => [
-        'home' => 'GET /',
-        'school' => 'GET /school',
-        'login' => 'GET /login',
-        'GET /user/dashboard',
-        'GET /logout',
-        'GET /socio/@name'
+        'GET' => [
+            'home' => '/',
+            'school' => '/school',
+            'login' => '/login'
+        ]
     ],
     "private" => [
-        'dashboard' => 'GET /user/dashboard',
-        'GET /user/logout'
+        'GET' => [
+            'dashboard' => '/user/dashboard',
+            'logout' => '/logout'
+        ]
     ]
 ];
+$f3->set('routing', $routing);
 
-// PUBLIC ROUTES
+
+// PUBLIC routing
 $f3->route(
-    $routes["public"]['home'],
+    "GET " . $routing["public"]["GET"]['home'],
     'HomeController->homeAction'
 );
-
 $f3->route(
-    $routes["public"]['school'],
+    "GET " . $routing["public"]["GET"]['school'],
     'HomeController->schoolAction'
 );
-
 $f3->route(
-    $routes["public"]['login'],
+    "GET " . $routing["public"]["GET"]['login'],
     'AuthController->loginAction'
 );
 
 
-
-
-// PRIVATE ROUTES
+// PRIVATE routing
 $f3->route(
-    $routes["private"]['dashboard'],
+    "GET " . $routing["private"]["GET"]['dashboard'],
     'UserController->dashboardAction'
 );
-
 $f3->route(
-    'GET /logout',
+    "GET " . $routing["private"]["GET"]['logout'],
     'AuthController->logoutAction'
 );
 
-$f3->route(
-    'GET /socio/@name',
-    'SocioController->mensajeAction'
-);
-
-
-
 
 // RUNNING THE APPLICATION
-
 $f3->run();

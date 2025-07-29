@@ -24,20 +24,31 @@ abstract class BaseController
     {
         return $this->dbMySQL;
     }
+
     /**
      * This method is called before the route is executed.
      * It can be used to perform actions such as authentication, logging, etc.
      * @param \Base $f3 The Fat-Free Framework instance
-     * @return bool
+     * @param array $routes The routes that are being matched
      */
-    public function beforeRoute(\Base $f3, array $routes): void {}
-
+    public function beforeRoute(\Base $f3, array $routes): void
+    {
+        // verficar si la ruta es publica o privada
+        // Si es privada, verificar si el usuario está autenticado
+        // Si no está autenticado, redirigir a la página de inicio de sesión o devolver un error 401
+        if ($this->isPrivateRoute($f3, $routes)) {
+            if (!$f3->get('SESSION.user')) {
+                $this->outputErrorResponse('Unauthorized', 401);
+                exit;
+            }
+        }
+    }
 
     /**
      * This method is called after the route is executed.
      * It can be used to perform actions such as logging, cleanup, etc.
      * @param \Base $f3 The Fat-Free Framework instance
-     * @return bool
+     * @return bool 
      */
     public function afterRoute(\Base $f3): void
     {
@@ -61,12 +72,10 @@ abstract class BaseController
         echo json_encode($data);
     }
 
-    protected function outputErrorResponse(\Base $f3, string $message, int $code = 400): void
+    protected function outputErrorResponse(string $message, int $code): void
     {
         http_response_code($code);
         header('Content-Type: application/json');
-        header('charset: UTF-8');
-        header('status: error');
         echo json_encode(['error' => $message]);
     }
 
@@ -78,18 +87,24 @@ abstract class BaseController
 
     protected function authorize(\Base $f3): bool
     {
-        // Implement authorization logic here
-        // For example, check if the user is logged in
         if (!$f3->get('SESSION.user')) {
-            $this->outputErrorResponse($f3, 'Unauthorized', 401);
+            $this->outputErrorResponse('Unauthorized', 401);
             return false;
         }
         return true;
     }
 
-    protected function isPublicRoute(\Base $f3): void
+    protected function isPrivateRoute(\Base $f3, array $routes): bool
     {
-        // Check if the current route is public
-        var_dump($f3);
+        foreach ($f3->get('routing') as $scope => $routing) {
+            foreach ($routing as $method => $route) {
+                foreach ($route as $name => $path) {
+                    if ($routes[0] === $path && $scope === 'private') {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
